@@ -1,5 +1,37 @@
+import React, { useState } from "react";
+
+interface SearchResult {
+  id: string;
+  name: string;
+}
+
 export const Search = () => {
+  const [searchValue, setSearchValue] = useState("");
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+    // Call a function to update the search results based on the search value
+    updateSearchResults(event.target.value);
+  };
+
+  const updateSearchResults = (searchValue: string) => {
+    // Call an API or perform a search operation to get the search results
+    // and update the searchResults state variable
+    if (searchValue == "") {
+      setSearchResults([]);
+    } else {
+      setSearchResults([
+        { id: "1", name: "Result 1" },
+        { id: "2", name: "Result 2" },
+        { id: "3", name: searchValue },
+      ]);
+    }
+
+  };
+
   return (
+    <>
       <label className="relative block">
         <span className="sr-only">Search</span>
         <span className="absolute inset-y-0 left-0 flex items-center pl-2">
@@ -23,7 +55,16 @@ export const Search = () => {
           placeholder="Como se llama tu trabajo..."
           type="text"
           name="search"
+          value={searchValue}
+          onInput={handleSearchChange}
         />
       </label>
+      {/* Render the search results */}
+      <ul>
+        {searchResults.map((result) => (
+          <li key={result.id}>{result.name}</li>
+        ))}
+      </ul>
+    </>
   )
 }
